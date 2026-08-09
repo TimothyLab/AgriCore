@@ -37,9 +37,9 @@ pipeline {
                     args '-v /root/.m2:/root/.m2 --network devops'
                 }
             }
-            
+
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('sonar') {
                     dir('agricore_spring_boot') {
                         sh '''
                             mvn sonar:sonar \
