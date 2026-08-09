@@ -1,11 +1,47 @@
 pipeline {
-    agent any
+    agent none
 
     stages {
-        stage('Test Jenkins') {
+
+        stage('Start BDD') {
+            agent any
             steps {
-                echo 'Jenkins fonctionne avec Agricore !'
+                sh 'docker compose up -d agricore-mysql'
             }
         }
+
+        stage('Build and Test') {
+            agent { 
+                docker {
+                    image 'maven:3.9.11-eclipse-temurin-21'
+                    args '-v /root/.m2:/root/.m2 --network devops'
+                }
+            }
+
+            steps {
+                dir('agricore_spring_boot') {
+                    sh '''
+                        mvn clean verify \
+                        -Dspring.datasource.url=jdbc:mysql://agricore-mysql:3306/agricore \
+                        -Dspring.datasource.username=root \
+                        -Dspring.datasource.password=root
+                    '''
+                }
+            }
+        }
+
+         stage('Stop database') {
+            agent any
+            steps {
+                sh 'docker compose stop agricore-mysql'
+            }
+            
+        }
+
     }
+    
+
+    
+        
+    
 }
