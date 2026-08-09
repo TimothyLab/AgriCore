@@ -42,7 +42,7 @@ pipeline {
                 withSonarQubeEnv('sonar') {
                     dir('agricore_spring_boot') {
                         sh '''
-                            mvn sonar:sonar \
+                            mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
                             -Dsonar.projectKey=agricore \
                             -Dsonar.projectName=AgriCore
                         '''
