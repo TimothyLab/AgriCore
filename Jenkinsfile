@@ -43,7 +43,7 @@ pipeline {
                     dir('agricore_spring_boot') {
                         sh '''
                             mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-                            -Dsonar.projectKey=agricore \
+                            -Dsonar.projectKey=AgriCore \
                             -Dsonar.projectName=AgriCore
                         '''
                     }
