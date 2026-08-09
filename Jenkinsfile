@@ -31,6 +31,13 @@ pipeline {
         }
 
         stage('Sonar analysis') {
+            agent {
+                docker {
+                    image 'maven:3.9.11-eclipse-temurin-21'
+                    args '-v /root/.m2:/root/.m2 --network devops'
+                }
+            }
+            
             steps {
                 withSonarQubeEnv('SonarQube') {
                     dir('agricore_spring_boot') {
