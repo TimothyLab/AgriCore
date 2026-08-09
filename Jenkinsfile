@@ -32,7 +32,7 @@ pipeline {
 
         stage('Sonar analysis') {
             steps {
-                whitSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('SonarQube') {
                     dir('agricore_spring_boot') {
                         sh '''
                             mvn sonar:sonar \
@@ -44,7 +44,7 @@ pipeline {
             }
         }
 
-           stage('Stop database') {
+        stage('Stop database') {
             agent any
             steps {
                 sh 'docker compose stop agricore-mysql'
