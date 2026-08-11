@@ -43,26 +43,18 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
 
         //Valider le token + extraire username 
         Optional<String> username = JwtUtils.validate(token); //méthode a implémenter dans JwtUtils
-
             if (username.isPresent()) {
-
             //Charger l'utilisateur 
                 UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(username.get());
-                
             //Creer l'auth
-
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                     );
-
                 SecurityContextHolder.getContext().setAuthentication(auth);
-
             }
-
-
-            filterChain.doFilter(request, response);    
+            filterChain.doFilter(request, response);
         } 
 
 

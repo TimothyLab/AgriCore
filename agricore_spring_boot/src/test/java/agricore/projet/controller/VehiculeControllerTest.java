@@ -69,11 +69,8 @@ public class VehiculeControllerTest {
     @MockitoBean
     private IDAOAnimal daoAnimal;
 
-
     @MockitoBean
-private IDAOPlante daoPlante;
-
-
+    private IDAOPlante daoPlante;
 
     @MockitoBean
     IDAOVehicule vehiculeRepository;
