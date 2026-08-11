@@ -56,8 +56,6 @@ pipeline {
             steps {
                 sh 'docker compose stop agricore-mysql'
             }
-            
         }
-        
     }
 }
