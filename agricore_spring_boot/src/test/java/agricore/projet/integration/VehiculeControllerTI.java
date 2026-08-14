@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -48,8 +47,8 @@ public class VehiculeControllerTI {
         daoUtilisateur.findByLogin("test2").ifPresent((u -> daoUtilisateur.delete(u)));
     }
 
-    @Test
-    void shouldAuthenticateAndReturnToken() throws Exception {
+
+    private String getToken() throws Exception {
 
         String json = """
                 {
@@ -72,14 +71,20 @@ public class VehiculeControllerTI {
         //Récup du token
         AuthResponse authResponse = objectMapper.readValue(result, AuthResponse.class); // ici on utiliser objectMapper pour transformer la string en objet AuthResponse
 
-        String token = authResponse.getToken(); // on récuper le token contenu dans la réponse
+        // on récuper le token contenu dans la réponse
+        return authResponse.getToken();
+
+    }
+
+    @Test
+    void shouldGetAllVehiculesReturnAuthorized() throws Exception {
 
         //requête authentifier // on test réellement la requete avec l'authentifiaction récupérer au dessus en ajoutant le token dans le header
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/vehicule")
-                .header("Authorization","Bearer "+token)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk()); // on attend 200
+                        .get("/api/vehicule")
+                        .header("Authorization","Bearer "+getToken())
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk()); // on attend 200
     }
 
     @Test
@@ -90,7 +95,54 @@ public class VehiculeControllerTI {
     }
 
     @Test
-    void shouldGetAllVehicules() throws Exception {
+    void shouldGetTypesVehicules() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/vehicule/types")
+                .header("Authorization", "Bearer " + getToken()))
+                .andExpect(MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    void shouldPostAcheterAnimal() throws Exception {
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post("/api/vehicule/{animalId}/acheterAnimal",1)
+                        .param("vehiculeId", "3")
+                        .header("Authorization", "Bearer " + getToken())
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
 
     }
+
+    @Test
+    void shouldPostRecolterPlante() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/vehicule/{planteId}/recolterPlante",7)
+                        .param("vehiculeId","3")
+                        .header("Authorization", "Bearer " + getToken()))
+                .andExpect(MockMvcResultMatchers.status().isOk()
+                );
+
+
+    }
+
+    @Test
+    void shouldfairePlein() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/vehicule/1/fairePlein")
+                        .header("Authorization", "Bearer " + getToken()))
+                .andExpect(MockMvcResultMatchers.status().isOk()
+                );
+
+
+    }
+
+
+
 }

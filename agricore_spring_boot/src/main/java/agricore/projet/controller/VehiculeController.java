@@ -62,7 +62,7 @@ public class VehiculeController {
                 .toList();
     }
 
-// Consommer du carburant pour acheter animal ou résolter ressource : on vérifie que le véhicule a assez de carburant pour faire le trajet, si oui on consomme le carburant nécessaire, sinon on lève une exception
+// Consommer du carburant pour acheter animal ou récolter ressource : on vérifie que le véhicule a assez de carburant pour faire le trajet, si oui on consomme le carburant nécessaire, sinon on lève une exception
     @PostMapping("/{animalId}/acheterAnimal")
     public void acheterAnimal(@PathVariable Integer animalId, @RequestParam Integer vehiculeId) {
         
