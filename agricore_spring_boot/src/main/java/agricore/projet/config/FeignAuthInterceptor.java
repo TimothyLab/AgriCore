@@ -3,12 +3,14 @@ package agricore.projet.config;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Slf4j
 @Component
 public class FeignAuthInterceptor implements RequestInterceptor {
 
@@ -34,7 +36,7 @@ public class FeignAuthInterceptor implements RequestInterceptor {
             template.header("Authorization", authHeader);
         }
 
-        System.out.println("FEIGN INTERCEPTOR CALLED");
-        System.out.println("RequestContext = " + RequestContextHolder.getRequestAttributes());
+        log.info("FEIGN INTERCEPTOR CALLED");
+        log.info("RequestContext = {}", RequestContextHolder.getRequestAttributes());
     }
 }

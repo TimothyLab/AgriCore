@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 //@SpringBootTest //Démarre l'application comme si tout était réellement lancé
 //@AutoConfigureMockMvc // config auto de l'objet MockMvc : permet de simuler des requêtes HTTP sans démarrer tomcat sur un port
-public class VehiculeControllerTI extends AbstractBddConnectionTest {
+class VehiculeControllerTest extends AbstractBddConnectionTest {
 
     @Test
     void shouldGetAllVehiculesReturnAuthorized() throws Exception {

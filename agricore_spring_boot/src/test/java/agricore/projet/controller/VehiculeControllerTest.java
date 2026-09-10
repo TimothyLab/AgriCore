@@ -1,10 +1,16 @@
 package agricore.projet.controller;
 
-import static org.mockito.Mockito.verify;
-
-import java.time.LocalDate;
-import java.util.List;
-
+import agricore.projet.config.JwtHeaderFilter;
+import agricore.projet.config.SecurityConfig;
+import agricore.projet.dto.vehicule.request.VehiculeRequestDTO;
+import agricore.projet.dto.vehicule.response.VehiculeResponseDTO;
+import agricore.projet.exception.VehiculeNotFound;
+import agricore.projet.model.TypeVehicule;
+import agricore.projet.repository.*;
+import agricore.projet.services.JpaUserDetailsService;
+import agricore.projet.services.JwtUtils;
+import agricore.projet.services.VehiculeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +23,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.util.List;
 
-import agricore.projet.config.JwtHeaderFilter;
-import agricore.projet.config.SecurityConfig;
-import agricore.projet.dto.vehicule.request.VehiculeRequestDTO;
-import agricore.projet.dto.vehicule.response.VehiculeResponseDTO;
-import agricore.projet.exception.VehiculeNotFound;
-import agricore.projet.model.TypeVehicule;
-import agricore.projet.repository.IDAOAnimal;
-import agricore.projet.repository.IDAOPlante;
-import agricore.projet.repository.IDAORessource;
-import agricore.projet.repository.IDAOVehicule;
-import agricore.projet.repository.IDAOZone;
-import agricore.projet.services.JpaUserDetailsService;
-import agricore.projet.services.JwtUtils;
-import agricore.projet.services.VehiculeService;
+import static org.mockito.Mockito.verify;
 
 @WebMvcTest(controllers = VehiculeController.class)
 @Import({SecurityConfig.class, JwtHeaderFilter.class})
@@ -86,7 +80,7 @@ public class VehiculeControllerTest {
    //ALL
 
     @Test
-    public void shouldgetAllVehiculeReturnUnauthorized() throws Exception {
+    void shouldAllVehiculeReturnUnauthorized() throws Exception {
         //given 
 
         //when
@@ -99,7 +93,7 @@ public class VehiculeControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldgetAllVehiculeReturnOk() throws Exception {
+    void shouldgetAllVehiculeReturnOk() throws Exception {
 
         //given 
         Mockito.when(vehiculeService.findAllDTO()).thenReturn(List.of(VEHICULE_RESPONSE_DTO));
@@ -116,7 +110,7 @@ public class VehiculeControllerTest {
     //BYID
 
     @Test
-    public void shouldGetVehiculeByIdReturnUnauthorized() throws Exception {
+    void shouldGetVehiculeByIdReturnUnauthorized() throws Exception {
         //given 
 
         //when
@@ -129,7 +123,7 @@ public class VehiculeControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldgetVehiculeByIdReturnNotFound() throws Exception {
+    void shouldVehiculeByIdReturnNotFound() throws Exception {
 
         //given 
         Mockito.when(vehiculeService.findByIdDTO(VEHICULE_ID)).thenThrow(VehiculeNotFound.class);
@@ -144,7 +138,7 @@ public class VehiculeControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldgetVehiculeByIdReturnOk() throws Exception {
+    void shouldgetVehiculeByIdReturnOk() throws Exception {
 
         //given 
         Mockito.when(vehiculeService.findByIdDTO(VEHICULE_ID)).thenReturn(VEHICULE_RESPONSE_DTO);
@@ -161,7 +155,7 @@ public class VehiculeControllerTest {
     //CREATE
 
     @Test
-    public void shouldaddVehiculeReturnUnauthorized() throws Exception {
+    void shouldaddVehiculeReturnUnauthorized() throws Exception {
         //given 
 
         //when
@@ -174,7 +168,7 @@ public class VehiculeControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldaddVehiculeReturnOk() throws Exception {
+    void shouldaddVehiculeReturnOk() throws Exception {
 
         //given 
         Mockito.when(vehiculeService.create(VEHICULE_REQUEST_DTO)).thenReturn(VEHICULE_RESPONSE_DTO);
@@ -192,7 +186,7 @@ public class VehiculeControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldaddVehiculeReturnBadRequest() throws Exception {
+    void shouldaddVehiculeReturnBadRequest() throws Exception {
 
         //given 
         String json = objectMapper.writeValueAsString(VEHICULE_REQUEST_DTO_INVALID);

@@ -15,13 +15,14 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AnimalControllerTest extends AbstractBddConnectionTest {
+class AnimalControllerTest extends AbstractBddConnectionTest {
 
     Animal animal = new Animal();
 
     UpdateAnimalRequest animal2 = new UpdateAnimalRequest();
 
     @BeforeEach
+    @Override
     public void setUp() {
         animal.setDateNaissance(LocalDate.EPOCH);
         animal.setDateVaccination(LocalDate.EPOCH);
@@ -34,7 +35,7 @@ public class AnimalControllerTest extends AbstractBddConnectionTest {
         animal2.setZoneId(3);
     }
     @AfterEach
-    public void cleanAnimalDb() {
+    void cleanAnimalDb() {
         //daoAnimal.findById(animal.getId()).ifPresent(animal -> {daoAnimal.delete(animal);});
     }
 
