@@ -17,8 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AnimalControllerTest extends AbstractBddConnectionTest {
 
-
-
     Animal animal = new Animal();
 
     UpdateAnimalRequest animal2 = new UpdateAnimalRequest();
