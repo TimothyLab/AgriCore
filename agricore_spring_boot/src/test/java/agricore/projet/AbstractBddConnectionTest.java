@@ -2,6 +2,8 @@ package agricore.projet;
 
 import agricore.projet.dto.utilisateur.AuthResponse;
 import agricore.projet.model.Client;
+import agricore.projet.model.Employe;
+import agricore.projet.model.Fermier;
 import agricore.projet.repository.IDAOAnimal;
 import agricore.projet.repository.IDAOUtilisateur;
 import agricore.projet.repository.IDAOZone;
@@ -38,32 +40,60 @@ public abstract class AbstractBddConnectionTest {
     protected ObjectMapper objectMapper;
 
     @BeforeEach
+    protected void setUpZone() {
+
+//        zone.setPosition();
+//        zone.setPlante();
+//        zone.setVehicules();
+//        zone.set
+    }
+
+    @BeforeEach
         //création d'un vrai utilisateur en bdd
-    protected void setUp() {
+    protected void setUpUsers() {
         Client client = new Client();
 
-        client.setLogin("test2");
+        client.setLogin("clientTest");
         client.setPassword(passwordEncoder.encode("test"));
         client.setNom("test2");
         client.setPrenom("test2");
         client.setMail("test@test.fr");
 
+        Employe employe = new Employe();
+        employe.setLogin("employeTest");
+        employe.setPassword(passwordEncoder.encode("test"));
+        employe.setNom("Employe");
+        employe.setPrenom("Test");
+
+        Fermier fermier = new Fermier();
+        fermier.setLogin("fermierTest");
+        fermier.setPassword(passwordEncoder.encode("test"));
+        fermier.setNom("Fermier");
+        fermier.setPrenom("Test");
+
+        employe.setFermier(fermier);
+
+        daoUtilisateur.save(fermier);
         daoUtilisateur.save(client);
+        daoUtilisateur.save(employe);
+
     }
     @AfterEach
     protected void cleandDb() {
-        daoUtilisateur.findByLogin("test2").ifPresent((u -> daoUtilisateur.delete(u)));
+        daoUtilisateur.findByLogin("clientTest").ifPresent((u -> daoUtilisateur.delete(u)));
+        daoUtilisateur.findByLogin("employeTest").ifPresent((u -> daoUtilisateur.delete(u)));
+        daoUtilisateur.findByLogin("fermierTest").ifPresent((u -> daoUtilisateur.delete(u)));
     }
 
 
-    protected String getToken() throws Exception {
+    protected String getToken(String username, String password) throws Exception {
 
         String json = """
                 {
-                    "username":"test",
-                    "password":"test"
+                    "username":"%s",
+                    "password":"%s"
                 }
-                """; // requete envoyé au endpoint /api/auth : correspond au DTO AuthRequest
+                """.formatted(username, password); // requete envoyé au endpoint /api/auth : correspond au DTO AuthRequest
 
         String result = mockMvc.perform( //on simule la vrai requete http
                         MockMvcRequestBuilders

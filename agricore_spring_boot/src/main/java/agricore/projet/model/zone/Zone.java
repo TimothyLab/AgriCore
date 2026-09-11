@@ -1,16 +1,18 @@
 package agricore.projet.model.zone;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import agricore.projet.model.*;
+import agricore.projet.model.Plante;
+import agricore.projet.model.Vehicule;
 import agricore.projet.model.animal.Animal;
 import agricore.projet.model.ressource.Ressource;
 import agricore.projet.model.zone.position.CellGridPosition;
 import agricore.projet.model.zone.position.Position;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="zone")
@@ -31,15 +33,18 @@ public class Zone {
 	//---- Mapping avec les autres classes
 	
 	@OneToMany(mappedBy = "zone")
+	@JsonIgnore
 	private List<Animal> animals = new ArrayList<>();
 
 	@OneToOne(mappedBy = "zone")
 	private Plante plante;
 	
 	@OneToMany(mappedBy = "zone")
+	@JsonIgnore
 	private List<Vehicule> vehicules = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "zone")
+	@JsonIgnore
 	private List<Ressource> ressources = new ArrayList<>();
 
 	public Zone() {

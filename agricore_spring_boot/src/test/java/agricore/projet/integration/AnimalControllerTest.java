@@ -4,6 +4,7 @@ import agricore.projet.AbstractBddConnectionTest;
 import agricore.projet.dto.animal.request.UpdateAnimalRequest;
 import agricore.projet.model.animal.Animal;
 import agricore.projet.model.animal.EspeceAnimal;
+import agricore.projet.model.zone.Zone;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,18 +23,24 @@ class AnimalControllerTest extends AbstractBddConnectionTest {
     UpdateAnimalRequest animal2 = new UpdateAnimalRequest();
 
     @BeforeEach
-    @Override
-    public void setUp() {
+    void setUp() {
+
+        Zone zone = daoZone.findById(3)
+                .orElseThrow(() -> new RuntimeException("Zone 3 introuvable"));
+
         animal.setDateNaissance(LocalDate.EPOCH);
         animal.setDateVaccination(LocalDate.EPOCH);
         animal.setEspece(EspeceAnimal.CHEVAL);
         animal.setMale(true);
+        animal.setZone(zone);
+
         animal2.setDateNaissance(LocalDate.EPOCH);
         animal2.setDateVaccination(LocalDate.of(2222,1,1));
         animal2.setEspece(EspeceAnimal.CHEVAL);
         animal2.setMale(true);
-        animal2.setZoneId(3);
+        animal2.setZoneId(zone.getId());
     }
+
     @AfterEach
     void cleanAnimalDb() {
         //daoAnimal.findById(animal.getId()).ifPresent(animal -> {daoAnimal.delete(animal);});
@@ -43,7 +50,7 @@ class AnimalControllerTest extends AbstractBddConnectionTest {
     void shouldGetAllAnimalsReturnAuthorized() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/animal")
-                .header("Authorization","Bearer "+getToken())
+                .header("Authorization", "Bearer " + getToken("fermierTest", "test"))
         ).andExpect(status().isOk());
     }
 
@@ -51,7 +58,7 @@ class AnimalControllerTest extends AbstractBddConnectionTest {
     void shouldGetAnimalByIdReturnAuthorized() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/animal/{id}",1)
-                .header("Authorization","Bearer "+getToken())
+                .header("Authorization", "Bearer " + getToken("clientTest", "test"))
         ).andExpect(status().isOk());
     }
     @Test
@@ -60,7 +67,7 @@ class AnimalControllerTest extends AbstractBddConnectionTest {
                 .post("/api/animal")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(animal))
-                .header("Authorization","Bearer "+getToken())
+                        .header("Authorization", "Bearer " + getToken("clientTest", "test"))
         ).andExpect(status().isOk())
          .andReturn();
     }
@@ -79,7 +86,7 @@ class AnimalControllerTest extends AbstractBddConnectionTest {
                 .put("/api/animal/{id}",animalPut.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(animal2))
-                .header("Authorization","Bearer "+getToken())
+                .header("Authorization", "Bearer " + getToken("clientTest", "test"))
         ).andExpect(status().isOk());
 
         Animal updatedAnimal = daoAnimal.findById(animalPut.getId()).orElseThrow();
@@ -95,7 +102,7 @@ class AnimalControllerTest extends AbstractBddConnectionTest {
     void shouldDeleteAnimalReturnAuthorized() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/animal")
-                .header("Authorization","Bearer "+getToken())
+                .header("Authorization", "Bearer " + getToken("clientTest", "test"))
         ).andExpect(status().isOk());
     }
 }

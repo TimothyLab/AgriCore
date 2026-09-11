@@ -17,7 +17,7 @@ class VehiculeControllerTest extends AbstractBddConnectionTest {
         //requête authentifier // on test réellement la requete avec l'authentifiaction récupérer au dessus en ajoutant le token dans le header
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/vehicule")
-                        .header("Authorization","Bearer "+getToken())
+                        .header("Authorization", "Bearer " + getToken("clientTest", "test"))
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk()); // on attend 200
     }
@@ -34,7 +34,7 @@ class VehiculeControllerTest extends AbstractBddConnectionTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/vehicule/types")
-                .header("Authorization", "Bearer " + getToken()))
+                        .header("Authorization", "Bearer " + getToken("clientTest", "test")))
                 .andExpect(MockMvcResultMatchers.status().isOk()
         );
     }
@@ -46,7 +46,7 @@ class VehiculeControllerTest extends AbstractBddConnectionTest {
                 MockMvcRequestBuilders
                         .post("/api/vehicule/{animalId}/acheterAnimal",1)
                         .param("vehiculeId", "3")
-                        .header("Authorization", "Bearer " + getToken())
+                        .header("Authorization", "Bearer " + getToken("clientTest", "test"))
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
@@ -59,7 +59,7 @@ class VehiculeControllerTest extends AbstractBddConnectionTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/vehicule/{planteId}/recolterPlante",7)
                         .param("vehiculeId","3")
-                        .header("Authorization", "Bearer " + getToken()))
+                        .header("Authorization", "Bearer " + getToken("clientTest", "test")))
                 .andExpect(MockMvcResultMatchers.status().isOk()
                 );
 
@@ -71,7 +71,7 @@ class VehiculeControllerTest extends AbstractBddConnectionTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/vehicule/1/fairePlein")
-                        .header("Authorization", "Bearer " + getToken()))
+                        .header("Authorization", "Bearer " + getToken("clientTest", "test")))
                 .andExpect(MockMvcResultMatchers.status().isOk()
                 );
 

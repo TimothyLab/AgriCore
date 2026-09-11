@@ -1,13 +1,5 @@
 package agricore.projet.config;
 
-import java.util.Optional;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import agricore.projet.services.JpaUserDetailsService;
 import agricore.projet.services.JwtUtils;
 import io.jsonwebtoken.io.IOException;
@@ -15,6 +7,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.util.Optional;
 
 @Component
 public class JwtHeaderFilter extends OncePerRequestFilter {
@@ -55,12 +54,5 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
             filterChain.doFilter(request, response);
-        } 
-
-
-
+    }
 }
-
-
-
-

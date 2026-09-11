@@ -1,11 +1,12 @@
 package agricore.projet.model;
 
-import java.util.List;
-
-import agricore.projet.model.zone.Zone;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
 
+import java.util.List;
+
+@Getter
 @Entity
 public class Fermier extends Utilisateur {
 	
@@ -15,15 +16,11 @@ public class Fermier extends Utilisateur {
 
 	public Fermier() {}
 
-	public List<Employe> getEmploye() {
-		return employe;
-	}
-
 	public void setEmploye(List<Employe> employe) {
 		this.employe = employe;
 	}
 
-	
+
 	public Fermier(Integer id, String login, String password, String nom, String prenom) {
 		super(id, login, password, nom, prenom);
 	}
