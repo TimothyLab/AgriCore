@@ -1,18 +1,5 @@
 package agricore.projet.controller;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import agricore.projet.dto.vehicule.request.VehiculeRequestDTO;
 import agricore.projet.dto.vehicule.response.TypeVehiculeDTO;
 import agricore.projet.dto.vehicule.response.VehiculeResponseDTO;
@@ -22,20 +9,20 @@ import agricore.projet.model.Vehicule;
 import agricore.projet.model.animal.Animal;
 import agricore.projet.model.ressource.NomRessource;
 import agricore.projet.model.ressource.Ressource;
-import agricore.projet.repository.IDAOAnimal;
-import agricore.projet.repository.IDAOPlante;
-import agricore.projet.repository.IDAORessource;
-import agricore.projet.repository.IDAOVehicule;
-import agricore.projet.repository.IDAOZone;
+import agricore.projet.repository.*;
 import agricore.projet.services.VehiculeService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/vehicule")
 public class VehiculeController {
 
+    private final String VEHICULE_NOT_FOUND = "Véhicule non trouvé";
   
     private final VehiculeService vehiculeService;
     public final IDAOVehicule daoVehicule;
@@ -65,8 +52,8 @@ public class VehiculeController {
 // Consommer du carburant pour acheter animal ou récolter ressource : on vérifie que le véhicule a assez de carburant pour faire le trajet, si oui on consomme le carburant nécessaire, sinon on lève une exception
     @PostMapping("/{animalId}/acheterAnimal")
     public void acheterAnimal(@PathVariable Integer animalId, @RequestParam Integer vehiculeId) {
-        
-        Vehicule vehicule = daoVehicule.findById(vehiculeId).orElseThrow(() -> new RuntimeException("Véhicule non trouvé"));
+
+        Vehicule vehicule = daoVehicule.findById(vehiculeId).orElseThrow(() -> new RuntimeException(VEHICULE_NOT_FOUND));
         Animal animal = daoAnimal.findById(animalId).orElseThrow(() -> new RuntimeException("Animal non trouvé"));
         
         vehiculeService.acheterAnimal(animal,vehicule);
@@ -74,8 +61,8 @@ public class VehiculeController {
 
     @PostMapping("/{planteId}/recolterPlante")
     public void recolterPlante(@PathVariable Integer planteId, @RequestParam Integer vehiculeId) {
-        
-        Vehicule vehicule = daoVehicule.findById(vehiculeId).orElseThrow(() -> new RuntimeException("Véhicule non trouvé"));
+
+        Vehicule vehicule = daoVehicule.findById(vehiculeId).orElseThrow(() -> new RuntimeException(VEHICULE_NOT_FOUND));
         Plante plante = daoPlante.findById(planteId).orElseThrow(() -> new RuntimeException("Plante non trouvée"));
         
         vehiculeService.recolterPlante(plante,vehicule);
@@ -86,7 +73,7 @@ public class VehiculeController {
 // FAIRE PLEIN : on consomme la ressource de carburant et on met à jour le niveau de carburant du véhicule.
     @PostMapping("/{id}/fairePlein")
     public void fairePlein(@PathVariable Integer id) {
-        Vehicule vehicule = daoVehicule.findById(id).orElseThrow(() -> new RuntimeException("Véhicule non trouvé"));
+        Vehicule vehicule = daoVehicule.findById(id).orElseThrow(() -> new RuntimeException(VEHICULE_NOT_FOUND));
 
         Ressource carburant = daoRessource.findByNom(NomRessource.ESSENCE).orElseThrow(() -> new RuntimeException("Carburant non trouvé") );
         

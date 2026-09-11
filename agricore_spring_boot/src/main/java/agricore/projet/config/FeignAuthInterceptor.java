@@ -21,8 +21,8 @@ public class FeignAuthInterceptor implements RequestInterceptor {
         ServletRequestAttributes attributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-        System.out.println("FEIGN INTERCEPTOR CALLED");
-        System.out.println("RequestContext = " + RequestContextHolder.getRequestAttributes());
+        log.info("FEIGN INTERCEPTOR CALLED");
+        log.info("RequestContext = " + RequestContextHolder.getRequestAttributes());
 
         if (attributes == null) {
             return;
