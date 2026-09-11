@@ -117,15 +117,19 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<!--  Permet de générer un rapport de tests (notamment pour le taux de couverture)  -->
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.13</version>
+
 				<executions>
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
+						<configuration>
+							<propertyName>jacocoArgLine</propertyName>
+						</configuration>
 					</execution>
 
 					<execution>
@@ -140,7 +144,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-
+				<configuration>
+					<!--suppress UnresolvedMavenProperty -->
+					<argLine>
+						${jacocoArgLine}
+						-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+					</argLine>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
